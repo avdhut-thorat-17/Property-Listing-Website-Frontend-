@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import './App.css'
+import './layout.scss'
+import Navbar from './components/navbar/Navbar'
 
 function App() {
 
   return (
-    <>
-      Hello World
-    </>
+    <div className='layout'>
+      <Navbar/>
+    </div>
   )
 }
 
