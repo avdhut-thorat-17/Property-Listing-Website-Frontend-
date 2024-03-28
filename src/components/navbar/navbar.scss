@@ -54,11 +54,15 @@ nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background-color: #fcf5f3;
+    background-color: white;
     height: 100%;
 
-    @include md{
-        background-color: transparent;
+    @include lg {
+        background: linear-gradient(to left, #F4DA97, #FFE7A7, #FFF2D1, #FFFFFF);
+    }
+
+    @include md {
+        background:none; // For medium devices, keep it white
     }
 
     a{
