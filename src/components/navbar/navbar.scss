@@ -46,6 +46,7 @@ nav {
       }
     }
   }
+
   .right {
     flex: 2;
     display: flex;
@@ -58,38 +59,36 @@ nav {
       background-color: transparent;
     }
 
-    a {
-      padding: 12px 24px;
-      margin: 20px;
-    }
-
-    .user{
+    .user {
       display: flex;
       align-items: center;
       font-weight: bold;
+      gap: 20px; // Adjust the gap to avoid overlapping
 
-      img{
+      img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 20px;
       }
 
-      span{
-        @include sm{
+      span {
+        @include sm {
           display: none;
         }
       }
 
-      .profile{
+      .profile {
+        display: flex;
+        align-items: center;
+        position: relative;
         padding: 12px 24px;
         background-color: #fece51;
         cursor: pointer;
         border: none;
-        position: relative;
-        
-        .notification{
+        gap: 10px; // Adjust gap between notification and text
+
+        .notification {
           position: absolute;
           top: -8px;
           right: -8px;
@@ -102,7 +101,18 @@ nav {
           align-items: center;
           justify-content: center;
         }
+      }
+    }
 
+    .btns {
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px; // Adjust the gap for spacing
+      align-items: center;
+
+      a {
+        padding: 12px 24px;
+        margin: 20px 0;
       }
     }
 
