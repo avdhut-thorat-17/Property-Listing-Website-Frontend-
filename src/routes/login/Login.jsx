@@ -1,14 +1,17 @@
 import "./login.scss";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import apiRequest from "../../lib/apiRequest";
+import { AuthContext } from "../../context/AuthContext";
 
 function Login() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const { updateUser } = useContext(AuthContext);
 
   const [errors, setErrors] = useState({});
 
@@ -43,7 +46,6 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
 
     // Check for errors
@@ -51,10 +53,14 @@ function Login() {
       return;
     }
 
+    setIsLoading(true);
+    
     try {
       const res = await apiRequest.post("auth/login", formData);
+      updateUser(res.data);
+
       setErrors({});
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       if (error.response && error.response.data.errors) {
         const validationErrors = error.response.data.errors.reduce((acc, err) => {
@@ -65,8 +71,7 @@ function Login() {
       } else {
         setErrors({ general: "Error logging in user" });
       }
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };

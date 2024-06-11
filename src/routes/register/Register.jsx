@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 import apiRequest from "../../lib/apiRequest";
 
 function Register() {
+
+  const [isLoading,setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -65,6 +68,8 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setErrors("")
 
     // Check for errors
     if (Object.keys(errors).length > 0) {
@@ -85,6 +90,8 @@ function Register() {
       } else {
         setErrors({ general: "Error registering user" });
       }
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -108,7 +115,7 @@ function Register() {
             <option value="Property Owner">Property Owner</option>
           </select>
           {errors.role && <p className="error">{errors.role}</p>}
-          <button type="submit">Register</button>
+          <button type="submit" disabled={isLoading}>Register</button>
           <Link to="/login">Do you have an account?</Link>
         </form>
       </div>
