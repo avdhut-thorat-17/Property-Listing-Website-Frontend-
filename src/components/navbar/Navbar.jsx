@@ -1,31 +1,32 @@
 import { useContext, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
-import { AuthContext } from '../../context/AuthContext'; // Correct import statement
+import { AuthContext } from '../../context/AuthContext'
 
 function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext)
 
+  // const user = true;
   return (
     <nav>
       <div className="left">
-        <Link to="/" className="logo">
-          <img src="/logo.png" alt="Logo" />
+        <a href="/" className="logo">
+          <img src="/logo.png" alt="" />
           <span>PGLocker</span>
-        </Link>
-        <Link to="/">Home</Link>
-        <Link to="/">About</Link>
-        <Link to="/">Contact</Link>
-        <Link to="/">Agents</Link>
+        </a>
+        <a href="/">Home</a>
+        <a href="/">About</a>
+        <a href="/">Contact</a>
+        <a href="/">Agents</a>
       </div>
       <div className="right">
         {currentUser ? (
           <div className="user">
             <img
               src={currentUser.avatar || '/noavatar.png'}
-              alt="User Avatar"
+              alt=""
             />
             <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
@@ -34,27 +35,30 @@ function Navbar() {
             </Link>
           </div>
         ) : (
-          <div className="btns">
-            <Link to="/login">Sign in</Link>
-            <Link to="/register" className="register">
-              Sign up
-            </Link>
-          </div>
+          <>
+            <div className="btns">
+
+              <a href="/login" className="signin">Sign in</a>
+              <a href="/register" className="register">
+                Sign up
+              </a>
+            </div>
+          </>
         )}
         <div className="menuIcon">
           <img
             src="/menu.png"
-            alt="Menu Icon"
+            alt=""
             onClick={() => setOpen((prev) => !prev)}
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <Link to="/">Home</Link>
-          <Link to="/">About</Link>
-          <Link to="/">Contact</Link>
-          <Link to="/">Agents</Link>
-          {!currentUser && <Link to="/login">Sign in</Link>}
-          {!currentUser && <Link to="/register">Sign up</Link>}
+          <a href="/">Home</a>
+          <a href="/">About</a>
+          <a href="/">Contact</a>
+          <a href="/">Agents</a>
+          <a href="/">Sign in</a>
+          <a href="/">Sign up</a>
         </div>
       </div>
     </nav>

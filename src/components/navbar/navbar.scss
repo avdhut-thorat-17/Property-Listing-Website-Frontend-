@@ -46,7 +46,6 @@ nav {
       }
     }
   }
-
   .right {
     flex: 2;
     display: flex;
@@ -59,36 +58,38 @@ nav {
       background-color: transparent;
     }
 
-    .user {
+    a {
+      padding: 12px 24px;
+      margin: 20px;
+    }
+
+    .user{
       display: flex;
       align-items: center;
       font-weight: bold;
-      gap: 20px; // Adjust the gap to avoid overlapping
 
-      img {
+      img{
         width: 40px;
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
+        margin-right: 20px;
       }
 
-      span {
-        @include sm {
+      span{
+        @include sm{
           display: none;
         }
       }
 
-      .profile {
-        display: flex;
-        align-items: center;
-        position: relative;
+      .profile{
         padding: 12px 24px;
         background-color: #fece51;
         cursor: pointer;
         border: none;
-        gap: 10px; // Adjust gap between notification and text
-
-        .notification {
+        position: relative;
+        
+        .notification{
           position: absolute;
           top: -8px;
           right: -8px;
@@ -101,19 +102,12 @@ nav {
           align-items: center;
           justify-content: center;
         }
+
       }
     }
 
-    .btns {
+    .btns{
       display: flex;
-      justify-content: flex-end;
-      gap: 20px; // Adjust the gap for spacing
-      align-items: center;
-
-      a {
-        padding: 12px 24px;
-        margin: 20px 0;
-      }
     }
 
     .register {
