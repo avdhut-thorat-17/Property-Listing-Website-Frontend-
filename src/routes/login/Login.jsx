@@ -1,76 +1,42 @@
+import { useContext, useState } from "react";
 import "./login.scss";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
-import apiRequest from "../../lib/apiRequest";
+import apiRequest from "../../lib/apiRequest.js";
 import { AuthContext } from "../../context/AuthContext";
 
 function Login() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { updateUser } = useContext(AuthContext);
 
-  const [errors, setErrors] = useState({});
-
-  const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Real-time validation for username
-    if (formData.username && formData.username.length < 3) {
-      setErrors((prev) => ({ ...prev, username: "Username must be at least 3 characters long" }));
-    } else {
-      setErrors((prev) => {
-        const { username, ...rest } = prev;
-        return rest;
-      });
-    }
-    
-    // Real-time validation for password
-    if (formData.password && formData.password.length < 6) {
-      setErrors((prev) => ({ ...prev, password: "Password must be at least 6 characters long" }));
-    } else {
-      setErrors((prev) => {
-        const { password, ...rest } = prev;
-        return rest;
-      });
-    }
-  }, [formData]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check for errors
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
     setIsLoading(true);
-    
+    setError("");
+    const formData = new FormData(e.target);
+
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    console.log("Submitting:", { username, password });
+
     try {
-      const res = await apiRequest.post("auth/login", formData);
+      const res = await apiRequest.post("/auth/login", {
+        username,
+        password,
+      });
+
+      console.log("Response:", res.data);
+
       updateUser(res.data);
 
-      setErrors({});
       navigate("/");
-    } catch (error) {
-      if (error.response && error.response.data.errors) {
-        const validationErrors = error.response.data.errors.reduce((acc, err) => {
-          acc[err.param] = err.msg;
-          return acc;
-        }, {});
-        setErrors(validationErrors);
-      } else {
-        setErrors({ general: "Error logging in user" });
-      }
+    } catch (err) {
+      console.error("Error:", err);
+      setError(err.response?.data?.message || "An error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -81,12 +47,22 @@ function Login() {
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <h1>Welcome back</h1>
-          {errors.general && <p className="error">{errors.general}</p>}
-          <input name="username" type="text" placeholder="Username" value={formData.username} onChange={handleChange} />
-          {errors.username && <p className="error">{errors.username}</p>}
-          <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} />
-          {errors.password && <p className="error">{errors.password}</p>}
-          <button type="submit" disabled={isLoading}>Login</button>
+          <input
+            name="username"
+            required
+            minLength={3}
+            maxLength={20}
+            type="text"
+            placeholder="Username"
+          />
+          <input
+            name="password"
+            type="password"
+            required
+            placeholder="Password"
+          />
+          <button disabled={isLoading}>Login</button>
+          {error && <span>{error}</span>}
           <Link to="/register">{"Don't"} you have an account?</Link>
         </form>
       </div>

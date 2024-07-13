@@ -8,33 +8,28 @@ import UploadWidget from "../../components/uploadWidget/UploadWidget";
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
-  const [avatar, setAvatar] = useState(currentUser.avatar);
+  const [avatar, setAvatar] = useState([]);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+
     const { username, email, password } = Object.fromEntries(formData);
 
     try {
-      const res = await apiRequest.put(`/user/${currentUser.id}`, {
+      const res = await apiRequest.put(`/users/${currentUser.id}`, {
         username,
         email,
         password,
-        avatar: avatar || currentUser.avatar
+        avatar:avatar[0]
       });
-
-      const { user, token } = res.data;
-
-      // Update the AuthContext with new user data and token
-      updateUser(user);
-      document.cookie = `token=${token}; path=/`;
-
+      updateUser(res.data);
       navigate("/profile");
     } catch (err) {
       console.log(err);
-      setError(err.response?.data?.message || "Something went wrong");
+      setError(err.response.data.message);
     }
   };
 
@@ -66,20 +61,20 @@ function ProfileUpdatePage() {
             <input id="password" name="password" type="password" />
           </div>
           <button>Update</button>
-          {error && <span>{error}</span>}
+          {error && <span>error</span>}
         </form>
       </div>
       <div className="sideContainer">
-        <img src={avatar || "/noavatar.png"} alt="" className="avatar" />
+        <img src={avatar[0] || currentUser.avatar || "/noavatar.jpg"} alt="" className="avatar" />
         <UploadWidget
           uwConfig={{
-            cloudName: "dl0agy4tl",
+            cloudName: "pglocker",
             uploadPreset: "pglocker",
             multiple: false,
             maxImageFileSize: 2000000,
             folder: "avatars",
           }}
-          setAvatar={setAvatar}
+          setState={setAvatar}
         />
       </div>
     </div>

@@ -1,6 +1,4 @@
-@import "../../responsive.scss";
-
-.register {
+.registerPage {
   height: 100%;
   display: flex;
 
@@ -16,15 +14,10 @@
       flex-direction: column;
       gap: 20px;
 
-      h1 {
-        margin-bottom: 10px;
-      }
-
-      input, select {
+      input {
         padding: 20px;
         border: 1px solid gray;
         border-radius: 5px;
-        font-size: 16px;
       }
 
       button {
@@ -32,10 +25,9 @@
         border-radius: 5px;
         border: none;
         background-color: #fece51;
-        color: #000;
+        color: rgb(0, 0, 0);
         font-weight: bold;
         cursor: pointer;
-        font-size: 16px;
 
         &:disabled {
           background-color: #bed9d8;
@@ -43,17 +35,15 @@
         }
       }
 
+      span {
+        color: rgba(255, 0, 0, 0.591);
+      }
+
       a {
         font-size: 14px;
         color: gray;
         border-bottom: 1px solid gray;
         width: max-content;
-      }
-
-      .error {
-        color: red;
-        font-size: 14px;
-        margin-bottom: 10px;
       }
     }
   }
@@ -64,16 +54,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    @include md {
-      display: none;
-    }
-
     img {
       height: 80%;
-      border-radius: 20px;
+      border-radius:20px;
       width: 100%;
-      object-fit: cover;
     }
   }
 }
