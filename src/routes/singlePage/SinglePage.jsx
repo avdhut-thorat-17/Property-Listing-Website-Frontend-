@@ -1,23 +1,26 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
+import Chat from "../../components/chat/Chat";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { SocketContext } from "../../context/SocketContext";
 import apiRequest from "../../lib/apiRequest";
 
 function SinglePage() {
   const post = useLoaderData();
   const [saved, setSaved] = useState(post.isSaved);
+  const [chatVisible, setChatVisible] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
 
   const handleSave = async () => {
     if (!currentUser) {
       navigate("/login");
     }
-    // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
     setSaved((prev) => !prev);
     try {
       await apiRequest.post("/users/save", { postId: post.id });
@@ -25,6 +28,13 @@ function SinglePage() {
       console.log(err);
       setSaved((prev) => !prev);
     }
+  };
+
+  const handleSendMessage = () => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+    setChatVisible(true);
   };
 
   return (
@@ -139,7 +149,7 @@ function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
+            <button onClick={handleSendMessage}>
               <img src="/chat.png" alt="" />
               Send a Message
             </button>
@@ -155,6 +165,21 @@ function SinglePage() {
           </div>
         </div>
       </div>
+      {chatVisible && (
+        <div className="chatContainer">
+          <Chat
+            chats={[
+              {
+                id: post.id,
+                receiver: post.user,
+                lastMessage: "",
+                seenBy: [],
+                messages: [],
+              },
+            ]}
+          />
+        </div>
+      )}
     </div>
   );
 }
